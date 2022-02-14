@@ -12,7 +12,7 @@ namespace WordService
     {
         static void Main(string[] args)
         {
-            var host = new ServiceHost(typeof(WordServiceLibrary.WordService), new Uri($"http://localhost:8080/words"));
+            var host = new ServiceHost(typeof(WordService), new Uri($"http://{Settings.Default.ServiceHost}:{Settings.Default.ServicePort}/{Settings.Default.ServiceName}"));
             host.Description.Behaviors.Add(new ServiceMetadataBehavior
             {
                 HttpGetEnabled = true,
@@ -24,7 +24,7 @@ namespace WordService
             host.Description.Behaviors.Add(
                 new ServiceDebugBehavior { IncludeExceptionDetailInFaults = true });
 
-            host.AddServiceEndpoint(typeof(WordServiceLibrary.IWordService), new BasicHttpBinding(), "basic");
+            host.AddServiceEndpoint(typeof(IWordService), new BasicHttpBinding(), "basic");
 
             try
             {
