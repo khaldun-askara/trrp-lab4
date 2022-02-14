@@ -46,6 +46,7 @@ namespace Workstation
             // 
             // bCancel
             // 
+            this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.bCancel.Location = new System.Drawing.Point(145, 40);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
@@ -64,8 +65,10 @@ namespace Workstation
             // 
             // AddEditWord
             // 
+            this.AcceptButton = this.bOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.bCancel;
             this.ClientSize = new System.Drawing.Size(284, 76);
             this.Controls.Add(this.tbWord);
             this.Controls.Add(this.bCancel);
