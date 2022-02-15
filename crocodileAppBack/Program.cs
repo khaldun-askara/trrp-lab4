@@ -6,6 +6,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.Net.NetworkInformation;
+using System.Linq;
 
 namespace crocodileAppBack
 {
@@ -39,7 +43,7 @@ namespace crocodileAppBack
             return nickname;
         }
 
-        public void SendMessageToClient(string msg)
+        public static void SendMessageToClient(TcpClient client, string msg)
         {
             NetworkStream stream = client.GetStream();
             Queue<string> que = new Queue<string>(msg.SplitInGroups(125));
@@ -85,14 +89,77 @@ namespace crocodileAppBack
 
     class Server
     {
-        public static void ClientHandler(List<CrocodileClient> clients, CrocodileClient croco_client)
+        // эти штуи делают красиво и позволяет закрыть все потоки нахуй при необходимости
+        private static CancellationTokenSource SocketLoopTokenSource;
+        private static CancellationTokenSource ListenerLoopTokenSource;
+        private static TcpListener Listener;
+
+        // тут живут клиенты! ConcurrentDictionary вроде должен делать красиво при работе с потоками
+        private static ConcurrentDictionary<int, TcpClient> Clients = new ConcurrentDictionary<int, TcpClient>();
+
+        // это счётчик клиентов, который можно трогать только безопасно!!!!!!!!!!!
+        private static int ClientCounter = 0;
+        public static void StartServer()
         {
+            SocketLoopTokenSource = new CancellationTokenSource();
+            ListenerLoopTokenSource = new CancellationTokenSource();
+            // TO DO: добавить конфиг
+            string ip = "127.0.0.1";
+            int port = 80;
+            Listener = new TcpListener(IPAddress.Parse(ip), port);
+            Listener.Start();
+            Task.Run(() => ListenerProcessingLoopAsync().ConfigureAwait(false));
+        }
+
+        private static async Task ListenerProcessingLoopAsync()
+        {
+            var cancellationToken = ListenerLoopTokenSource.Token;
+            try
+            {
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    TcpClient client = Listener.AcceptTcpClient();
+                    int clientId = Interlocked.Increment(ref ClientCounter);
+                    Clients.TryAdd(clientId, client);
+                    Console.WriteLine("A client " + client.ToString() + " connected.");
+                    Console.WriteLine($"Socket {clientId}: New connection.");
+                    _ = Task.Run(() => ClientHandle(client, clientId).ConfigureAwait(false));
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message + " from ListenerProcessingLoopAsync");
+            }
+        }
+
+        public static void StopAsync()
+        {
+
+            Console.WriteLine("\nServer is stopping.");
+            SocketLoopTokenSource.Cancel();
+            ListenerLoopTokenSource.Cancel();   // safe to stop now that sockets are closed
+            Listener.Stop();
+        }
+
+        public static TcpState GetState(TcpClient tcpClient)
+        {
+            Console.WriteLine("GetState open");
+            var foo = IPGlobalProperties.GetIPGlobalProperties()
+            .GetActiveTcpConnections()
+            .SingleOrDefault(x => x.LocalEndPoint.Equals(tcpClient.Client.LocalEndPoint)
+                             && x.RemoteEndPoint.Equals(tcpClient.Client.RemoteEndPoint));
+            Console.WriteLine("GetState close");
+            return foo != null ? foo.State : TcpState.Unknown;
+        }
+
+        private static async Task ClientHandle(TcpClient client, int id)
+        {
+            var loopToken = SocketLoopTokenSource.Token;
             Console.WriteLine("booop");
-            TcpClient client = croco_client.client;
             NetworkStream stream = client.GetStream();
 
             // enter to an infinite cycle to be able to handle every change in stream
-            while (true)
+            while (!loopToken.IsCancellationRequested)
             {
                 while (!stream.DataAvailable) ;
                 while (client.Available < 3) ; // match against "get"
@@ -125,6 +192,15 @@ namespace crocodileAppBack
                 }
                 else
                 {
+                    if (GetState(client) == TcpState.CloseWait)
+                    {
+                        client.Close();
+                        Console.WriteLine(id + " is closed");
+                        Clients.TryRemove(id, out client);
+                        foreach (var cl in Clients)
+                            Console.WriteLine(cl.Key);
+                        return;
+                    }
                     bool fin = (bytes[0] & 0b10000000) != 0,
                         mask = (bytes[1] & 0b10000000) != 0; // must be true, "All messages from the client to the server have this bit set"
 
@@ -158,12 +234,12 @@ namespace crocodileAppBack
                             decoded[i] = (byte)(bytes[offset + i] ^ masks[i % 4]);
 
                         string text = Encoding.UTF8.GetString(decoded);
-                        Console.WriteLine(croco_client.nickname + " отправил {0}", text);
-                        string resp_str = croco_client.nickname + " отправил " + text;
-                        foreach (var other_client in clients)
+                        Console.WriteLine(id + " отправил {0}", text);
+                        string resp_str = id + " отправил " + text;
+                        foreach (var other_client in Clients)
                         {
-                            if (other_client.nickname != croco_client.nickname)
-                                other_client.SendMessageToClient(croco_client.nickname + " отправил " + text);
+                            if (other_client.Key != id)
+                                CrocodileClient.SendMessageToClient(other_client.Value, id + " отправил " + text);
                         }
                     }
                     else
@@ -174,28 +250,18 @@ namespace crocodileAppBack
             }
         }
 
-        public static void StartServer()
-        {
-            
-        }
         public static void Main()
         {
-            string ip = "127.0.0.1";
-            int port = 80;
-            var server = new TcpListener(IPAddress.Parse(ip), port);
-
-            server.Start();
-            Console.WriteLine("Server has started on {0}:{1}, Waiting for a connection...", ip, port);
-            List<Thread> client_threads = new List<Thread>();
-            List<CrocodileClient> clients = new List<CrocodileClient>();
-            while (true)
+            try
             {
-                CrocodileClient client = new CrocodileClient(server.AcceptTcpClient());
-                clients.Add(client);
-                Console.WriteLine("A client " + client.ToString() + " connected.");
-                Thread thread = new Thread(() => ClientHandler(clients, client));
-                thread.Start();
-                client_threads.Add(thread);
+                StartServer();
+                Console.WriteLine("Press any key to exit...\n");
+                Console.ReadKey(true);
+                StopAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                // this is normal when tasks are canceled, ignore it
             }
         }
     }
