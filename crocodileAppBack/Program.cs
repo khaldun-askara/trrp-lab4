@@ -10,9 +10,51 @@ using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using System.Net.NetworkInformation;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace crocodileAppBack
 {
+    // класс сообщения в игровом чате
+    [Serializable]
+    public class ChatMessage
+    {
+        public string nickname;
+        public string message;
+
+        public ChatMessage() { }
+
+        public ChatMessage(string nickname, string message)
+        {
+            this.nickname = nickname;
+            this.message = message;
+        }
+
+        public string ToJson()
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            return JsonSerializer.Serialize(this, options);
+        }
+    }
+    // класс сообщения вебсокета type определяет, какого типа сообщение было прислано
+    [Serializable]
+    public class WSMessage
+    {
+        public string type;
+        public string message;
+        public WSMessage() { }
+
+        public WSMessage(string type, string message)
+        {
+            this.type = type;
+            this.message = message;
+        }
+        public string ToJson()
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            return JsonSerializer.Serialize(this, options);
+        }
+    }
     public static class XLExtensions
     {
         public static IEnumerable<string> SplitInGroups(this string original, int size)
@@ -27,6 +69,8 @@ namespace crocodileAppBack
             yield return original.Substring(p);
         }
     }
+
+    // крококлиент, хранит дцпклиента и его ник, выдаёт ники
     class CrocodileClient
     {
         public TcpClient client;
@@ -43,6 +87,30 @@ namespace crocodileAppBack
             return nickname;
         }
 
+
+    }
+
+    class Server
+    {
+        // эти штуи делают красиво и позволяет закрыть все потоки нахуй при необходимости
+        private static CancellationTokenSource SocketLoopTokenSource;
+        private static CancellationTokenSource ListenerLoopTokenSource;
+        private static TcpListener Listener;
+        // мьютексы для текущего слова
+        private static Mutex mut = new Mutex();
+        private static Mutex mut_chat = new Mutex();
+        private static Mutex mut_closing = new Mutex();
+        // текущее загаданное слово
+        private static string Current_word;
+        // идентификатор рисующего
+        private static int drawingClienID;
+        // тут живут крококлиенты! ConcurrentDictionary вроде должен делать красиво при работе с потоками
+        private static ConcurrentDictionary<int, CrocodileClient> Clients = new ConcurrentDictionary<int, CrocodileClient>();
+
+        // это счётчик клиентов, который можно трогать только безопасно!!!!!!!!!!!
+        private static int ClientCounter = 0;
+
+        // делает магию при отправке и оно работает!!!!!!
         public static void SendMessageToClient(TcpClient client, string msg)
         {
             NetworkStream stream = client.GetStream();
@@ -85,20 +153,32 @@ namespace crocodileAppBack
 
             return header;
         }
-    }
 
-    class Server
-    {
-        // эти штуи делают красиво и позволяет закрыть все потоки нахуй при необходимости
-        private static CancellationTokenSource SocketLoopTokenSource;
-        private static CancellationTokenSource ListenerLoopTokenSource;
-        private static TcpListener Listener;
+        // тут надо сделать доставание с сервака
+        public static string GetRandomWord()
+        {
+            return "загаданное слово " + new Random().Next(100);
+        }
 
-        // тут живут клиенты! ConcurrentDictionary вроде должен делать красиво при работе с потоками
-        private static ConcurrentDictionary<int, TcpClient> Clients = new ConcurrentDictionary<int, TcpClient>();
+        // если клиент присоединился первым, он автоматически становится рисующим. Иначе при подключении человек становится угадывающим.
+        public static void NewClientRole(TcpClient client, int clientID)
+        {
+            // если у нас клиент первый
+            if (Clients.Count == 0)
+            {
+                mut.WaitOne();
+                Current_word = GetRandomWord();
+                drawingClienID = clientID;
+                // выдаём рисователю роль рисователя и слово для рисования
+                SendMessageToClient(client, (new WSMessage("drawing_role", "true").ToJson()));
+                SendMessageToClient(client, (new WSMessage("word", Current_word).ToJson()));
+                mut.ReleaseMutex();
+            }
+            // если не первый, то он угадыватель
+            else SendMessageToClient(client, (new WSMessage("drawing_role", "false").ToJson()));
+        }
 
-        // это счётчик клиентов, который можно трогать только безопасно!!!!!!!!!!!
-        private static int ClientCounter = 0;
+        // запускает работу лисенера
         public static void StartServer()
         {
             SocketLoopTokenSource = new CancellationTokenSource();
@@ -111,19 +191,29 @@ namespace crocodileAppBack
             Task.Run(() => ListenerProcessingLoopAsync().ConfigureAwait(false));
         }
 
+        // при подсоединении нового клиента выдаёт ему роль, добавляет его в список клиентов и запускает ему отдельный поток, читающий данные
         private static async Task ListenerProcessingLoopAsync()
         {
             var cancellationToken = ListenerLoopTokenSource.Token;
             try
             {
+                // это чтобы можно было прервать снаружи
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     TcpClient client = Listener.AcceptTcpClient();
                     int clientId = Interlocked.Increment(ref ClientCounter);
-                    Clients.TryAdd(clientId, client);
-                    Console.WriteLine("A client " + client.ToString() + " connected.");
-                    Console.WriteLine($"Socket {clientId}: New connection.");
-                    _ = Task.Run(() => ClientHandle(client, clientId).ConfigureAwait(false));
+                    // выдаём роль
+                    NewClientRole(client, clientId);
+                    // выдаём ник
+                    CrocodileClient crococlient = new CrocodileClient(client);
+                    // добавляем клиента в списочек клиентов
+                    Clients.TryAdd(clientId, crococlient);
+                    Console.WriteLine("A client " + crococlient.ToString() + " connected.");
+                    Console.WriteLine($"Websocket {clientId}: New connection.");
+
+                    // каждый клиент получает обработчик
+                    _ = Task.Run(() => ClientHandle(crococlient, clientId).ConfigureAwait(false));
+                    SendToAll((new WSMessage("chat", (new ChatMessage("Кроколдос", crococlient.ToString() + " вошёл в чат!")).ToJson()).ToJson()));
                 }
             }
             catch (Exception e)
@@ -132,29 +222,31 @@ namespace crocodileAppBack
             }
         }
 
+        // отменяет все процессы, обрабатывающие потоки от клиентов + отменяет функцию лисенера
         public static void StopAsync()
         {
-
             Console.WriteLine("\nServer is stopping.");
             SocketLoopTokenSource.Cancel();
             ListenerLoopTokenSource.Cancel();   // safe to stop now that sockets are closed
             Listener.Stop();
         }
 
+        // получает статус дцп клиента
         public static TcpState GetState(TcpClient tcpClient)
         {
-            Console.WriteLine("GetState open");
+            // Console.WriteLine("GetState open");
             var foo = IPGlobalProperties.GetIPGlobalProperties()
             .GetActiveTcpConnections()
             .SingleOrDefault(x => x.LocalEndPoint.Equals(tcpClient.Client.LocalEndPoint)
                              && x.RemoteEndPoint.Equals(tcpClient.Client.RemoteEndPoint));
-            Console.WriteLine("GetState close");
+            // Console.WriteLine("GetState close");
             return foo != null ? foo.State : TcpState.Unknown;
         }
 
-        private static async Task ClientHandle(TcpClient client, int id)
+        private static async Task ClientHandle(CrocodileClient crococlient, int id)
         {
             var loopToken = SocketLoopTokenSource.Token;
+            TcpClient client = crococlient.client;
             Console.WriteLine("booop");
             NetworkStream stream = client.GetStream();
 
@@ -168,6 +260,7 @@ namespace crocodileAppBack
                 stream.Read(bytes, 0, client.Available);
                 string s = Encoding.UTF8.GetString(bytes);
 
+                // клиент и сервер переглядываются
                 if (Regex.IsMatch(s, "^GET", RegexOptions.IgnoreCase))
                 {
                     Console.WriteLine("=====Handshaking from client=====\n{0}", s);
@@ -192,13 +285,30 @@ namespace crocodileAppBack
                 }
                 else
                 {
+                    // ой а если клиент помер?
                     if (GetState(client) == TcpState.CloseWait)
                     {
+
                         client.Close();
                         Console.WriteLine(id + " is closed");
-                        Clients.TryRemove(id, out client);
+                        Clients.TryRemove(id, out crococlient);
                         foreach (var cl in Clients)
                             Console.WriteLine(cl.Key);
+
+                        SendToAll((new WSMessage("chat", (new ChatMessage("Кроколдос", crococlient.ToString() + " помер")).ToJson()).ToJson()));
+                        // если помер рисовака, рисоваку надо выбрать случайно из оставшихся, загадать новое слово и раздать роли
+                        if (Clients.Count != 0 && id == drawingClienID)
+                        {
+                            int randomindex = new Random().Next(Clients.Count);
+                            mut_closing.WaitOne();
+                            Current_word = GetRandomWord();
+                            var temp = Clients.ElementAt(randomindex);
+                            SendMessageToClient(temp.Value.client, (new WSMessage("drawing_role", "true").ToJson()));
+                            drawingClienID = temp.Key;
+                            SendMessageToClient(client, (new WSMessage("word", Current_word).ToJson()));
+                            SendToOthers((new WSMessage("drawing_role", "false").ToJson()), drawingClienID);
+                            mut_closing.ReleaseMutex();
+                        }
                         return;
                     }
                     bool fin = (bytes[0] & 0b10000000) != 0,
@@ -234,19 +344,68 @@ namespace crocodileAppBack
                             decoded[i] = (byte)(bytes[offset + i] ^ masks[i % 4]);
 
                         string text = Encoding.UTF8.GetString(decoded);
-                        Console.WriteLine(id + " отправил {0}", text);
-                        string resp_str = id + " отправил " + text;
-                        foreach (var other_client in Clients)
+                        // получаем сообщение вебсокета
+                        WSMessage wsmessage = JsonSerializer.Deserialize<WSMessage>(text);
+
+                        // и в соответствии с типом...
+                        switch (wsmessage.type)
                         {
-                            if (other_client.Key != id)
-                                CrocodileClient.SendMessageToClient(other_client.Value, id + " отправил " + text);
+                            // если отправляется линия (то есть рисовулькин рисует), то её надо отправить всем остальным
+                            case "lineart":
+                                SendToOthers(text, id);
+                                break;
+                            // если кто-то что-то пишет в чат, это рассылается всем (в том числе отправляющему)
+                            case "chat":
+                                mut_chat.WaitOne();
+                                SendToAll(text);
+
+                                ChatMessage messagefromchat = JsonSerializer.Deserialize<ChatMessage>(wsmessage.message);
+                                // если в сообщении есть правильный ответ, необходимо сообщить о победе всем, загадать новое слово, отправить новую роль угадавшему
+                                // сохранить новую роль рисоваки, остальным раздать роли угаывающих
+                                if (Regex.IsMatch(messagefromchat.message, Current_word, RegexOptions.IgnoreCase))
+                                {
+                                    SendToAll((new WSMessage("chat", (new ChatMessage("Кроколдос", "Правильное слово: " + Current_word + ". Победитель: " + crococlient.ToString())).ToJson()).ToJson()));
+                                    Current_word = GetRandomWord();
+                                    SendMessageToClient(client, (new WSMessage("drawing_role", "true").ToJson()));
+                                    drawingClienID = id;
+                                    SendMessageToClient(client, (new WSMessage("word", Current_word).ToJson()));
+                                    SendToOthers((new WSMessage("drawing_role", "false").ToJson()), id);
+                                }
+                                mut_chat.ReleaseMutex();
+                                break;
+
                         }
+
+                        Console.WriteLine(id + " отправил {0}", text);
+                        // string resp_str = id + " отправил " + text;
+                        // foreach (var other_client in Clients)
+                        // {
+                        //     if (other_client.Key != id)
+                        //         SendMessageToClient(other_client.Value.client, id + " отправил " + text);
+                        // }
                     }
                     else
                         Console.WriteLine("mask bit not set");
 
                     Console.WriteLine();
                 }
+            }
+        }
+
+        public static void SendToOthers(string message, int cur_id)
+        {
+            foreach (var other_client in Clients)
+            {
+                if (other_client.Key != cur_id)
+                    SendMessageToClient(other_client.Value.client, message);
+            }
+        }
+
+        public static void SendToAll(string message)
+        {
+            foreach (var client in Clients)
+            {
+                SendMessageToClient(client.Value.client, message);
             }
         }
 
