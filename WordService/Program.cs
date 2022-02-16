@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -35,8 +37,51 @@ namespace WordService
                 Console.WriteLine("Сервис уже запущен");
                 return;
             }
-            Console.WriteLine("Server is running...");
-            Console.ReadLine();
+
+
+            WordService service = new WordService();
+
+            var factory = new ConnectionFactory()
+            {
+                //HostName = "localhost",
+                Uri = new Uri(Settings.Default.MQUri)
+            };
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.QueueDeclare(queue: "suggestions",
+                                     durable: true,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
+
+                var consumer = new EventingBasicConsumer(channel);
+                consumer.Received += (model, ea) =>
+                {
+                    var body = ea.Body.ToArray();
+                    var message = Encoding.UTF8.GetString(body);
+                    Console.WriteLine(" [x] Received {0}", message);
+
+                    try
+                    {
+                        service.InsertWord(message, false);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Failed to insert a word");
+                    }
+                    Console.WriteLine("A word is inserted");
+                };
+                channel.BasicConsume(queue: "suggestions",
+                                     autoAck: true,
+                                     consumer: consumer);
+
+                Console.WriteLine("Server is running...");
+                Console.ReadLine();
+            }
+
+            //Console.WriteLine("Server is running...");
+            //Console.ReadLine();
         }
     }
 }

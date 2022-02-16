@@ -32,5 +32,26 @@
     <Setting Name="ServiceName" Type="System.String" Scope="User">
       <Value Profile="(Default)">words</Value>
     </Setting>
+    <Setting Name="BackupDatabase" Type="System.String" Scope="User">
+      <Value Profile="(Default)">backup_dictionary</Value>
+    </Setting>
+    <Setting Name="MQHost" Type="System.String" Scope="User">
+      <Value Profile="(Default)">localhost</Value>
+    </Setting>
+    <Setting Name="QueueName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">suggestions</Value>
+    </Setting>
+    <Setting Name="MQUser" Type="System.String" Scope="User">
+      <Value Profile="(Default)">username</Value>
+    </Setting>
+    <Setting Name="MQPass" Type="System.String" Scope="User">
+      <Value Profile="(Default)">password</Value>
+    </Setting>
+    <Setting Name="MQPort" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5672</Value>
+    </Setting>
+    <Setting Name="MQUri" Type="System.String" Scope="User">
+      <Value Profile="(Default)">amqps://ovdrgwtv:9ZDAyzbUOh_7r4dQ9-LyrH4gbPowcVeY@hawk.rmq.cloudamqp.com/ovdrgwtv</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

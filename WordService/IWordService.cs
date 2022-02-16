@@ -25,6 +25,8 @@ namespace WordService
         void MoveFromSuggestions(int id);
         [OperationContract]
         string GetRandomWord();
+        [OperationContract]
+        void DoBackup();
     }
 
     [DataContract]

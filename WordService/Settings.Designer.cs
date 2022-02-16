@@ -142,5 +142,90 @@ namespace WordService {
                 this["ServiceName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("backup_dictionary")]
+        public string BackupDatabase {
+            get {
+                return ((string)(this["BackupDatabase"]));
+            }
+            set {
+                this["BackupDatabase"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
+        public string MQHost {
+            get {
+                return ((string)(this["MQHost"]));
+            }
+            set {
+                this["MQHost"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("suggestions")]
+        public string QueueName {
+            get {
+                return ((string)(this["QueueName"]));
+            }
+            set {
+                this["QueueName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("username")]
+        public string MQUser {
+            get {
+                return ((string)(this["MQUser"]));
+            }
+            set {
+                this["MQUser"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("password")]
+        public string MQPass {
+            get {
+                return ((string)(this["MQPass"]));
+            }
+            set {
+                this["MQPass"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5672")]
+        public int MQPort {
+            get {
+                return ((int)(this["MQPort"]));
+            }
+            set {
+                this["MQPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("amqps://ovdrgwtv:9ZDAyzbUOh_7r4dQ9-LyrH4gbPowcVeY@hawk.rmq.cloudamqp.com/ovdrgwtv" +
+            "")]
+        public string MQUri {
+            get {
+                return ((string)(this["MQUri"]));
+            }
+            set {
+                this["MQUri"] = value;
+            }
+        }
     }
 }

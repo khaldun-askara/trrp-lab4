@@ -34,3 +34,5 @@ C:\Users\ciceron\source\repos\trrp-lab4\WordService\bin\Debug\Microsoft.Bcl.Hash
 C:\Users\ciceron\source\repos\trrp-lab4\WordService\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 C:\Users\ciceron\source\repos\trrp-lab4\WordService\bin\Debug\System.Collections.Immutable.dll
 C:\Users\ciceron\source\repos\trrp-lab4\WordService\bin\Debug\System.Collections.Immutable.xml
+C:\Users\ciceron\source\repos\trrp-lab4\WordService\bin\Debug\RabbitMQ.Client.dll
+C:\Users\ciceron\source\repos\trrp-lab4\WordService\bin\Debug\RabbitMQ.Client.xml

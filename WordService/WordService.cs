@@ -5,6 +5,8 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using Npgsql;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 
 namespace WordService
 {
@@ -149,6 +151,11 @@ namespace WordService
                     }
                 }
             }
+        }
+
+        public void DoBackup()
+        {
+
         }
     }
 }
