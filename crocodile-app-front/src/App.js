@@ -9,55 +9,55 @@ import { TouchScaleState } from "react-canvas-draw/lib/interactionStateMachine";
 
 class App extends React.Component {
 
-  componentDidMount(){
+  componentDidMount() {
     // this is an "echo" websocket service
 
-    
+
 
     this.connection = new WebSocket('ws://' + configData.url);
     // listen to onmessage event
-    this.connection.onmessage = async (evt) => { 
+    this.connection.onmessage = async (evt) => {
       var reply = JSON.parse(evt.data);
-        switch(reply.type) {
-          case 'drawing_role':
-            
-            if (reply.message === 'true')
-              this.role = 'Рисующий';
-            else
-              this.role = 'Угадывающий';
-            console.log(this.role);
+      switch (reply.type) {
+        case 'drawing_role':
 
-            this.setState({ messages: this.messages.push(<Message message={"Ваша роль: " + this.role} sender="" />) });
-            break;
+          if (reply.message === 'true')
+            this.role = 'Рисующий';
+          else
+            this.role = 'Угадывающий';
+          console.log(this.role);
 
-          case 'word':
-            console.log(reply.message);
-            this.setState({ messages: this.messages.push(<Message message={"Слово для рисования: " + reply.message} sender="" />) });
-            this.canvas.clear();
-            break;
+          this.setState({ messages: this.messages.push(<Message message={"Ваша роль: " + this.role} sender="" />) });
+          break;
 
-          case 'chat':
-            var chat_message = JSON.parse(reply.message);
-            this.setState({ 
-              messages: this.messages.push(<Message message={chat_message.message} sender={chat_message.nickname} />) 
-            });
-            break;
+        case 'word':
+          console.log(reply.message);
+          this.setState({ messages: this.messages.push(<Message message={"Слово для рисования: " + reply.message} sender="" />) });
+          this.canvas.clear();
+          break;
 
-          case 'lineart':
-            console.log(reply.message);
-            // this.canvas.loadSaveData(reply.message)
-            // this.setState({ 
-            //   messages: this.messages.push(<Message message={reply.type + ': ' + reply.message} sender="" />) 
-            // });
-            this.canvas.loadSaveData(reply.message, true);
-            break;
+        case 'chat':
+          var chat_message = JSON.parse(reply.message);
+          this.setState({
+            messages: this.messages.push(<Message message={chat_message.message} sender={chat_message.nickname} />)
+          });
+          break;
 
-          default:
-            this.setState({ 
-              messages: this.messages.push(<Message message={reply.type + ': ' + reply.message} sender="" />) 
-            });
-            break;
-        }
+        case 'lineart':
+          console.log(reply.message);
+          // this.canvas.loadSaveData(reply.message)
+          // this.setState({ 
+          //   messages: this.messages.push(<Message message={reply.type + ': ' + reply.message} sender="" />) 
+          // });
+          this.canvas.loadSaveData(reply.message, true);
+          break;
+
+        default:
+          this.setState({
+            messages: this.messages.push(<Message message={reply.type + ': ' + reply.message} sender="" />)
+          });
+          break;
+      }
 
     };
   }
@@ -85,7 +85,7 @@ class App extends React.Component {
     const maxScrollTop = scrollHeight - height;
     this.messageList.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
   }
-  
+
   componentDidUpdate() {
     this.scrollToBottom();
     // this.sendLineArt();
@@ -99,11 +99,11 @@ class App extends React.Component {
         type: 'lineart',
         message: this.canvas.getSaveData()
       };
-  
+
       var a = JSON.stringify(WSMessage);
-      
+
       console.log(a);
-  
+
       this.connection.send(a);
     }
   }
@@ -123,7 +123,7 @@ class App extends React.Component {
     console.log(a)
 
     this.connection.send(a);
-  }  
+  }
 
   UndoLine = async (e) => {
     e.preventDefault();
@@ -134,25 +134,25 @@ class App extends React.Component {
     // e.preventDefault();
     this.canvas.loadSaveData();
   }
-  
+
   render() {
     return (
       <div className="wrapper">
         <form className="drawing-space" onSubmit={this.UndoLine}>
-          <CanvasDraw 
-            onChange={this.sendLineArt} 
-            ref={canvasDraw => (this.canvas = canvasDraw)} 
-            brushRadius={5} 
+          <CanvasDraw
+            onChange={this.sendLineArt}
+            ref={canvasDraw => (this.canvas = canvasDraw)}
+            brushRadius={5}
             disabled={this.role == 'Угадывающий'}
             className="canvas" />
-          <button>Отменить</button>
+          {this.role == 'Рисующий' && <button>Отменить</button>}
         </form>
         <div>
           <div className="chat" ref={(div) => { this.messageList = div; }}>
             {this.messages}
           </div>
-          {this.role == 'Угадывающий' && <Form sendMessage={this.sendMessage}/>}
-          <Suggestions sendSuggestion={this.sendSuggestion}/>
+          {this.role == 'Угадывающий' && <Form sendMessage={this.sendMessage} />}
+          <Suggestions sendSuggestion={this.sendSuggestion} />
         </div>
       </div>
     );
