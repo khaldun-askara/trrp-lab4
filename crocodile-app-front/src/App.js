@@ -4,30 +4,36 @@ import Form from "./components/form";
 import Croc_canvas from "./components/croc_canvas";
 import Suggestions from "./components/suggestions";
 import CanvasDraw from "react-canvas-draw";
+import configData from "./Config.json";
+import { TouchScaleState } from "react-canvas-draw/lib/interactionStateMachine";
 
 class App extends React.Component {
 
   componentDidMount(){
     // this is an "echo" websocket service
-    this.connection = new WebSocket('ws://127.0.0.1');
+
+    
+
+    this.connection = new WebSocket('ws://' + configData.url);
     // listen to onmessage event
     this.connection.onmessage = async (evt) => { 
       var reply = JSON.parse(evt.data);
         switch(reply.type) {
           case 'drawing_role':
-            var role;
+            
             if (reply.message === 'true')
-              role = 'Рисующий';
+              this.role = 'Рисующий';
             else
-              role = 'Угадывающий';
-            console.log(role);
+              this.role = 'Угадывающий';
+            console.log(this.role);
 
-            this.setState({ messages: this.messages.push(<Message message={"Ваша роль: " + role} sender="" />) });
+            this.setState({ messages: this.messages.push(<Message message={"Ваша роль: " + this.role} sender="" />) });
             break;
 
           case 'word':
             console.log(reply.message);
             this.setState({ messages: this.messages.push(<Message message={"Слово для рисования: " + reply.message} sender="" />) });
+            this.canvas.clear();
             break;
 
           case 'chat':
@@ -38,11 +44,12 @@ class App extends React.Component {
             break;
 
           case 'lineart':
-            console.log(reply.message)
-            // this.setState({ canvas: this.canvas.loadSaveData(reply.message)});
-            this.setState({ 
-              messages: this.messages.push(<Message message={reply.type + ': ' + reply.message} sender="" />) 
-            });
+            console.log(reply.message);
+            // this.canvas.loadSaveData(reply.message)
+            // this.setState({ 
+            //   messages: this.messages.push(<Message message={reply.type + ': ' + reply.message} sender="" />) 
+            // });
+            this.canvas.loadSaveData(reply.message);
             break;
 
           default:
@@ -84,37 +91,68 @@ class App extends React.Component {
     // this.sendLineArt();
   }
 
-  handleKeyPress = (event) => {
-    if (event.ctrlKey && event.key === 'z') {
-      this.setState({ messages: this.messages.push(<Message message="sdf" sender="" />) })
+  sendLineArt = async (e) => {
+    // e.preventDefault();
+
+    if (this.role == 'Рисующий') {
+      let WSMessage = {
+        type: 'lineart',
+        message: this.canvas.getSaveData()
+      };
+  
+      var a = JSON.stringify(WSMessage);
+      
+      console.log(a);
+  
+      this.connection.send(a);
     }
   }
 
-  sendLineArt = () => {
-    // e.preventDefault();
+  sendSuggestion = async (e) => {
+    e.preventDefault();
+    const word = e.target.elements.message.value;
+    e.target.reset();
 
     let WSMessage = {
-      type: 'lineart',
-      message: this.canvas.getSaveData()
+      type: 'suggestion',
+      message: word
     };
 
     var a = JSON.stringify(WSMessage);
 
+    console.log(a)
+
     this.connection.send(a);
+  }  
+
+  UndoLine = async (e) => {
+    e.preventDefault();
+    this.canvas.undo();
+  }
+
+  DrawLine = async (e) => {
+    // e.preventDefault();
+    this.canvas.loadSaveData();
   }
   
   render() {
     return (
       <div className="wrapper">
-        <form className="drawing-space">
-          <CanvasDraw ref={(div) => { this.canvas = div; }} brushRadius={5} className="canvas" />
+        <form className="drawing-space" onSubmit={this.UndoLine}>
+          <CanvasDraw 
+            onChange={this.sendLineArt} 
+            ref={canvasDraw => (this.canvas = canvasDraw)} 
+            brushRadius={5} 
+            disabled={this.role == 'Угадывающий'}
+            className="canvas" />
+          <button>Отменить</button>
         </form>
         <div>
           <div className="chat" ref={(div) => { this.messageList = div; }}>
             {this.messages}
           </div>
-          <Form sendMessage={this.sendMessage}/>
-          <Suggestions />
+          {this.role == 'Угадывающий' && <Form sendMessage={this.sendMessage}/>}
+          <Suggestions sendSuggestion={this.sendSuggestion}/>
         </div>
       </div>
     );
