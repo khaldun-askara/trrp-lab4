@@ -11,7 +11,7 @@ using System.Collections.Concurrent;
 using System.Net.NetworkInformation;
 using System.Linq;
 using System.Text.Json;
-
+using RabbitMQ.Client;
 
 namespace crocodileAppBack
 {
@@ -244,10 +244,7 @@ namespace crocodileAppBack
         {
             SocketLoopTokenSource = new CancellationTokenSource();
             ListenerLoopTokenSource = new CancellationTokenSource();
-            // TO DO: добавить конфиг
-            string ip = "127.0.0.1";
-            int port = 80;
-            Listener = new TcpListener(IPAddress.Parse(ip), port);
+            Listener = new TcpListener(IPAddress.Parse(config.Default.ip), config.Default.port);
             Listener.Start();
             Task.Run(() => ListenerProcessingLoopAsync().ConfigureAwait(false));
         }
@@ -435,6 +432,9 @@ namespace crocodileAppBack
                                 }
                                 mut_chat.ReleaseMutex();
                                 break;
+                            case "suggestion":
+                                SendToMQ(wsmessage.message);
+                                break;
 
                         }
 
@@ -468,6 +468,41 @@ namespace crocodileAppBack
             foreach (var client in Clients)
             {
                 SendMessageToClient(client.Value.client, message);
+            }
+        }
+
+        public static string DeleteExtraSpaces(string str)
+        {
+            return Regex.Replace(DeleteBorderSpaces(str), "\\s+", " ");
+        }
+
+        public static string DeleteBorderSpaces(string str)
+        {
+            if (str is null)
+                return "";
+            return Regex.Replace(Regex.Replace(str, "^\\s+", ""), "\\s+$", "");
+        }
+
+        public static void SendToMQ(string message)
+        {
+            message = DeleteExtraSpaces(message.ToLower());
+            var factory = new ConnectionFactory() { Uri = new Uri(config.Default.MQ) };
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
+            {
+                channel.QueueDeclare(queue: "suggestions",
+                                     durable: true,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
+
+                var body = Encoding.UTF8.GetBytes(message);
+
+                channel.BasicPublish(exchange: "",
+                                     routingKey: "suggestions",
+                                     basicProperties: null,
+                                     body: body);
+                Console.WriteLine(" [x] Sent {0}", message);
             }
         }
 

@@ -8,7 +8,7 @@
       "version": "1.0.0",
       "restore": {
         "projectUniqueName": "C:\\Users\\Aisen Sousuke\\OneDrive\\учебное дерьмо\\10 трим\\тррррррррррррррп\\lab 4\\crocodileAppBack\\lab 4.csproj",
-        "projectName": "lab 4",
+        "projectName": "crocodileAppBack",
         "projectPath": "C:\\Users\\Aisen Sousuke\\OneDrive\\учебное дерьмо\\10 трим\\тррррррррррррррп\\lab 4\\crocodileAppBack\\lab 4.csproj",
         "packagesPath": "C:\\Users\\Aisen Sousuke\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Aisen Sousuke\\OneDrive\\учебное дерьмо\\10 трим\\тррррррррррррррп\\lab 4\\crocodileAppBack\\obj\\",
@@ -43,6 +43,16 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
+          "dependencies": {
+            "RabbitMQ.Client": {
+              "target": "Package",
+              "version": "[6.2.3, )"
+            },
+            "System.Configuration.ConfigurationManager": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

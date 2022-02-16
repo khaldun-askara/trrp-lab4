@@ -11,12 +11,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("lab 4")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("crocodileAppBack")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
-[assembly: System.Reflection.AssemblyProductAttribute("lab 4")]
-[assembly: System.Reflection.AssemblyTitleAttribute("lab 4")]
+[assembly: System.Reflection.AssemblyProductAttribute("crocodileAppBack")]
+[assembly: System.Reflection.AssemblyTitleAttribute("crocodileAppBack")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Создано классом WriteCodeFragment MSBuild.

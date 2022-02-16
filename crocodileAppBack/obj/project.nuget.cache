@@ -1,8 +1,20 @@
 {
   "version": 2,
-  "dgSpecHash": "YAuAT1bmjYVZm6gs/lbA/vfnm0EMPj8AKzO5AuWLu6vong5z+wqMNfTyXKF79F0exUObxv45YcvD4PFSjTev1A==",
+  "dgSpecHash": "wDFejkS3Y3htPkz05/bJjJt3r86IhYoezC0dUrz082tAlzlb+igtt1Hc2j5DsV3Xo62LvbmN1dNhMLs2UhHo8Q==",
   "success": true,
   "projectFilePath": "C:\\Users\\Aisen Sousuke\\OneDrive\\учебное дерьмо\\10 трим\\тррррррррррррррп\\lab 4\\crocodileAppBack\\lab 4.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Aisen Sousuke\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
+    "C:\\Users\\Aisen Sousuke\\.nuget\\packages\\rabbitmq.client\\6.2.3\\rabbitmq.client.6.2.3.nupkg.sha512",
+    "C:\\Users\\Aisen Sousuke\\.nuget\\packages\\system.configuration.configurationmanager\\6.0.0\\system.configuration.configurationmanager.6.0.0.nupkg.sha512",
+    "C:\\Users\\Aisen Sousuke\\.nuget\\packages\\system.drawing.common\\6.0.0\\system.drawing.common.6.0.0.nupkg.sha512",
+    "C:\\Users\\Aisen Sousuke\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
+    "C:\\Users\\Aisen Sousuke\\.nuget\\packages\\system.security.accesscontrol\\6.0.0\\system.security.accesscontrol.6.0.0.nupkg.sha512",
+    "C:\\Users\\Aisen Sousuke\\.nuget\\packages\\system.security.cryptography.protecteddata\\6.0.0\\system.security.cryptography.protecteddata.6.0.0.nupkg.sha512",
+    "C:\\Users\\Aisen Sousuke\\.nuget\\packages\\system.security.permissions\\6.0.0\\system.security.permissions.6.0.0.nupkg.sha512",
+    "C:\\Users\\Aisen Sousuke\\.nuget\\packages\\system.security.principal.windows\\5.0.0\\system.security.principal.windows.5.0.0.nupkg.sha512",
+    "C:\\Users\\Aisen Sousuke\\.nuget\\packages\\system.threading.channels\\4.7.1\\system.threading.channels.4.7.1.nupkg.sha512",
+    "C:\\Users\\Aisen Sousuke\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
+  ],
   "logs": []
 }
