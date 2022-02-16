@@ -1,5 +1,5 @@
-﻿
-using System;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -11,7 +11,7 @@ using System.Collections.Concurrent;
 using System.Net.NetworkInformation;
 using System.Linq;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+
 
 namespace crocodileAppBack
 {
@@ -74,6 +74,43 @@ namespace crocodileAppBack
         }
     }
 
+    public class Root
+    {
+        public string name { get; set; }
+        public string address { get; set; }
+        public double latitude { get; set; }
+        public double longitude { get; set; }
+        public string maiden_name { get; set; }
+        public string birth_data { get; set; }
+        public string phone_h { get; set; }
+        public string phone_w { get; set; }
+        public string email_u { get; set; }
+        public string email_d { get; set; }
+        public string username { get; set; }
+        public string password { get; set; }
+        public string domain { get; set; }
+        public string useragent { get; set; }
+        public string ipv4 { get; set; }
+        public string macaddress { get; set; }
+        public string plasticcard { get; set; }
+        public string cardexpir { get; set; }
+        public int bonus { get; set; }
+        public string company { get; set; }
+        public string color { get; set; }
+        public string uuid { get; set; }
+        public int height { get; set; }
+        public double weight { get; set; }
+        public string blood { get; set; }
+        public string eye { get; set; }
+        public string hair { get; set; }
+        public string pict { get; set; }
+        public string url { get; set; }
+        public string sport { get; set; }
+        public string ipv4_url { get; set; }
+        public string email_url { get; set; }
+        public string domain_url { get; set; }
+    }
+
     // крококлиент, хранит дцпклиента и его ник, выдаёт ники
     class CrocodileClient
     {
@@ -83,7 +120,7 @@ namespace crocodileAppBack
         public CrocodileClient(TcpClient client)
         {
             this.client = client;
-            nickname = "Crocodile client №" + new Random().Next(100);
+            nickname = GetStupidNickname();
         }
 
         override public string ToString()
@@ -91,6 +128,26 @@ namespace crocodileAppBack
             return nickname;
         }
 
+        public static string GetStupidNickname()
+        {
+            try
+            {
+                WebRequest request = WebRequest.Create("https://api.namefake.com/ukrainian-ukraine/");
+                WebResponse response = request.GetResponse();
+                using (Stream stream = response.GetResponseStream())
+                {
+                    using (StreamReader reader = new StreamReader(stream))
+                    {
+                        Root temp = JsonSerializer.Deserialize<Root>(reader.ReadToEnd());
+                        return temp.name;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return "Банановый крокодильчик №" + new Random().Next(999999);
+            }
+        }
 
     }
 

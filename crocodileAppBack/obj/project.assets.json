@@ -8,23 +8,24 @@
     "net5.0": []
   },
   "packageFolders": {
-    "C:\\Users\\ciceron\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\Aisen Sousuke\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ciceron\\source\\repos\\калдунс_бренч\\trrp-lab4\\crocodileAppBack\\lab 4.csproj",
+      "projectUniqueName": "C:\\Users\\Aisen Sousuke\\OneDrive\\учебное дерьмо\\10 трим\\тррррррррррррррп\\lab 4\\crocodileAppBack\\lab 4.csproj",
       "projectName": "lab 4",
-      "projectPath": "C:\\Users\\ciceron\\source\\repos\\калдунс_бренч\\trrp-lab4\\crocodileAppBack\\lab 4.csproj",
-      "packagesPath": "C:\\Users\\ciceron\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ciceron\\source\\repos\\калдунс_бренч\\trrp-lab4\\crocodileAppBack\\obj\\",
+      "projectPath": "C:\\Users\\Aisen Sousuke\\OneDrive\\учебное дерьмо\\10 трим\\тррррррррррррррп\\lab 4\\crocodileAppBack\\lab 4.csproj",
+      "packagesPath": "C:\\Users\\Aisen Sousuke\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Aisen Sousuke\\OneDrive\\учебное дерьмо\\10 трим\\тррррррррррррррп\\lab 4\\crocodileAppBack\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\ciceron\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Aisen Sousuke\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -64,7 +65,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.405\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.404\\RuntimeIdentifierGraph.json"
       }
     }
   }

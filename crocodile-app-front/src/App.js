@@ -49,7 +49,7 @@ class App extends React.Component {
             // this.setState({ 
             //   messages: this.messages.push(<Message message={reply.type + ': ' + reply.message} sender="" />) 
             // });
-            this.canvas.loadSaveData(reply.message);
+            this.canvas.loadSaveData(reply.message, true);
             break;
 
           default:
