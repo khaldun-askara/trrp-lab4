@@ -3,6 +3,7 @@ using System.IO;
 using System.Timers;
 using System.Configuration;
 using System.Collections.Specialized;
+using ConsoleApp1;
 
 namespace ConsoleApplication2
 {
@@ -22,8 +23,7 @@ namespace ConsoleApplication2
 
         static void t1_Elapsed(object sender, ElapsedEventArgs e)
         {
-            int hours = 0;
-            Int32.TryParse(ConfigurationManager.AppSettings.Get("backuptime"), out hours);
+            int hours = Settings1.Default.backuptime;
 
             DateTime scheduledRun = DateTime.Today.AddHours(hours);  // runs today at 3am
             System.IO.FileInfo lastTime = new System.IO.FileInfo(filepath);
