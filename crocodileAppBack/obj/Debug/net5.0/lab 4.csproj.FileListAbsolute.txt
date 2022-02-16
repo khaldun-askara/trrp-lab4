@@ -14,3 +14,19 @@ C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррр
 C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\obj\Debug\net5.0\ref\lab 4.dll
 C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\obj\Debug\net5.0\lab 4.pdb
 C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\obj\Debug\net5.0\lab 4.genruntimeconfig.cache
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\lab 4.exe
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\lab 4.deps.json
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\lab 4.runtimeconfig.json
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\lab 4.runtimeconfig.dev.json
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\lab 4.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\ref\lab 4.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\lab 4.pdb
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\lab 4.csproj.AssemblyReference.cache
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\lab 4.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\lab 4.AssemblyInfoInputs.cache
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\lab 4.AssemblyInfo.cs
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\lab 4.csproj.CoreCompileInputs.cache
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\lab 4.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\ref\lab 4.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\lab 4.pdb
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\lab 4.genruntimeconfig.cache

@@ -1,9 +1,9 @@
 import React from "react";
 
-const Message = () => (
+const Message = (props) => (
     <div className="message">
-        <header className="message__header">Sender</header>
-        <p className="message__text">message</p>
+        <header className="message__header">{props.sender}</header>
+        <p className="message__text">{props.message}</p>
     </div>
 )
 

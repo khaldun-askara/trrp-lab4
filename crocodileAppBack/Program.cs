@@ -19,8 +19,8 @@ namespace crocodileAppBack
     [Serializable]
     public class ChatMessage
     {
-        public string nickname;
-        public string message;
+        public string nickname { get; set; }
+        public string message { get; set; }
 
         public ChatMessage() { }
 
@@ -33,15 +33,17 @@ namespace crocodileAppBack
         public string ToJson()
         {
             var options = new JsonSerializerOptions { WriteIndented = true };
-            return JsonSerializer.Serialize(this, options);
+            string tmp = JsonSerializer.Serialize(this, options);
+            Console.WriteLine("ChatMessage" + tmp);
+            return tmp;
         }
     }
     // класс сообщения вебсокета type определяет, какого типа сообщение было прислано
     [Serializable]
     public class WSMessage
     {
-        public string type;
-        public string message;
+        public string type { get; set; }
+        public string message { get; set; }
         public WSMessage() { }
 
         public WSMessage(string type, string message)
@@ -52,7 +54,9 @@ namespace crocodileAppBack
         public string ToJson()
         {
             var options = new JsonSerializerOptions { WriteIndented = true };
-            return JsonSerializer.Serialize(this, options);
+            string tmp = JsonSerializer.Serialize(this, options);
+            Console.WriteLine("WSMessage" + tmp + type + message);
+            return tmp;
         }
     }
     public static class XLExtensions
@@ -164,7 +168,7 @@ namespace crocodileAppBack
         public static void NewClientRole(TcpClient client, int clientID)
         {
             // если у нас клиент первый
-            if (Clients.Count == 0)
+            if (Clients.Count == 1)
             {
                 mut.WaitOne();
                 Current_word = GetRandomWord();
@@ -202,8 +206,6 @@ namespace crocodileAppBack
                 {
                     TcpClient client = Listener.AcceptTcpClient();
                     int clientId = Interlocked.Increment(ref ClientCounter);
-                    // выдаём роль
-                    NewClientRole(client, clientId);
                     // выдаём ник
                     CrocodileClient crococlient = new CrocodileClient(client);
                     // добавляем клиента в списочек клиентов
@@ -213,7 +215,7 @@ namespace crocodileAppBack
 
                     // каждый клиент получает обработчик
                     _ = Task.Run(() => ClientHandle(crococlient, clientId).ConfigureAwait(false));
-                    SendToAll((new WSMessage("chat", (new ChatMessage("Кроколдос", crococlient.ToString() + " вошёл в чат!")).ToJson()).ToJson()));
+
                 }
             }
             catch (Exception e)
@@ -282,6 +284,10 @@ namespace crocodileAppBack
                         "Sec-WebSocket-Accept: " + swkaSha1Base64 + "\r\n\r\n");
 
                     stream.Write(response, 0, response.Length);
+
+                    // выдаём роль
+                    NewClientRole(client, id);
+                    SendToAll((new WSMessage("chat", (new ChatMessage("", crococlient.ToString() + " вошёл в чат!")).ToJson()).ToJson()));
                 }
                 else
                 {
@@ -295,7 +301,7 @@ namespace crocodileAppBack
                         foreach (var cl in Clients)
                             Console.WriteLine(cl.Key);
 
-                        SendToAll((new WSMessage("chat", (new ChatMessage("Кроколдос", crococlient.ToString() + " помер")).ToJson()).ToJson()));
+                        SendToAll((new WSMessage("chat", (new ChatMessage("", crococlient.ToString() + " помер")).ToJson()).ToJson()));
                         // если помер рисовака, рисоваку надо выбрать случайно из оставшихся, загадать новое слово и раздать роли
                         if (Clients.Count != 0 && id == drawingClienID)
                         {
@@ -305,7 +311,7 @@ namespace crocodileAppBack
                             var temp = Clients.ElementAt(randomindex);
                             SendMessageToClient(temp.Value.client, (new WSMessage("drawing_role", "true").ToJson()));
                             drawingClienID = temp.Key;
-                            SendMessageToClient(client, (new WSMessage("word", Current_word).ToJson()));
+                            SendMessageToClient(temp.Value.client, (new WSMessage("word", Current_word).ToJson()));
                             SendToOthers((new WSMessage("drawing_role", "false").ToJson()), drawingClienID);
                             mut_closing.ReleaseMutex();
                         }
@@ -356,15 +362,14 @@ namespace crocodileAppBack
                                 break;
                             // если кто-то что-то пишет в чат, это рассылается всем (в том числе отправляющему)
                             case "chat":
+                                SendToAll(new WSMessage("chat", (new ChatMessage(crococlient.ToString(), wsmessage.message)).ToJson()).ToJson());
+                                Console.WriteLine("сообщение получено");
                                 mut_chat.WaitOne();
-                                SendToAll(text);
-
-                                ChatMessage messagefromchat = JsonSerializer.Deserialize<ChatMessage>(wsmessage.message);
                                 // если в сообщении есть правильный ответ, необходимо сообщить о победе всем, загадать новое слово, отправить новую роль угадавшему
                                 // сохранить новую роль рисоваки, остальным раздать роли угаывающих
-                                if (Regex.IsMatch(messagefromchat.message, Current_word, RegexOptions.IgnoreCase))
+                                if (Regex.IsMatch(wsmessage.message, Current_word, RegexOptions.IgnoreCase))
                                 {
-                                    SendToAll((new WSMessage("chat", (new ChatMessage("Кроколдос", "Правильное слово: " + Current_word + ". Победитель: " + crococlient.ToString())).ToJson()).ToJson()));
+                                    SendToAll((new WSMessage("chat", (new ChatMessage("", "Правильное слово: " + Current_word + ". Победитель: " + crococlient.ToString())).ToJson()).ToJson()));
                                     Current_word = GetRandomWord();
                                     SendMessageToClient(client, (new WSMessage("drawing_role", "true").ToJson()));
                                     drawingClienID = id;
@@ -415,7 +420,7 @@ namespace crocodileAppBack
             {
                 StartServer();
                 Console.WriteLine("Press any key to exit...\n");
-                Console.ReadKey(true);
+                Console.ReadLine();
                 StopAsync();
             }
             catch (OperationCanceledException)

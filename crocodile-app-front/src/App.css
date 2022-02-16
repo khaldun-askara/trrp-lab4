@@ -1,5 +1,5 @@
 .message {
-    background-color: var(--color-light-gray);
+    background-color: white;
     /* color: var(--color-gray); */
     padding: var(--indent-small);
     border-radius: var(--frame-radius-main);
@@ -9,6 +9,7 @@
 .message__header {
     font-size: var(--font-size-big);
     margin: auto;
+    font-weight: bold;
 }
 
 .message__text {
@@ -26,7 +27,7 @@
 .wrapper {
     flex-direction: row;
     display: flex;
-    background-color: var(--color-gray);
+    background-color: var(--color-light-gray);
     width: max-content;
     padding: var(--indent-small);
 }
@@ -34,7 +35,8 @@
 .canvas {
     background-color: var(--color-light-gray);
     border-radius: var(--frame-radius-main);
-    padding: 150px;
+    margin: auto;
+    /* padding: 150px; */
 }
 
 .drawing-space {
@@ -68,3 +70,6 @@
     margin: auto;
     /* margin-top: var(--indent-small); */
 }
+
+/* .canvas {
+    /* margin; */

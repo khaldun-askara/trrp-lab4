@@ -3,9 +3,9 @@ import CanvasDraw from "react-canvas-draw";
 
 const Croc_canvas = (props) => (
     <form className="drawing-space">
-        <header className="message__header">Слово для рисования</header>
+        <header>Рисующий: {props.role}</header>
+        <header className="message__header">Слово: {props.word}</header>
         <CanvasDraw brushRadius={5} />
-        <button>Сдаться</button>
     </form>
 )
 

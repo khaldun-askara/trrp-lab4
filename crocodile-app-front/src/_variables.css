@@ -1,10 +1,10 @@
 :root {  
     --line-spacing: 1.25;
     --font-size-main: 14px;
-    --font-size-big: 20px;
+    --font-size-big: 16px;
     --color-gray: #96A1AB;
     --color-dark: #282E3A;
-    --color-light-gray: #ECECEC;
+    --color-light-gray: #dddddd;
     --color-grayish-blue: #3D4957;
     --color-beige: #DBC7A6;
     --main-part-max-size: 1128px;
