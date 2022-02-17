@@ -5,7 +5,6 @@ import Croc_canvas from "./components/croc_canvas";
 import Suggestions from "./components/suggestions";
 import CanvasDraw from "react-canvas-draw";
 import configData from "./Config.json";
-import { TouchScaleState } from "react-canvas-draw/lib/interactionStateMachine";
 
 class App extends React.Component {
 
@@ -13,14 +12,20 @@ class App extends React.Component {
     // this is an "echo" websocket service
 
 
-
+    // подключаемся к серверу
     this.connection = new WebSocket('ws://' + configData.url);
+    this.connection.onclose = () => {
+      this.setState({ messages: this.messages.push(<Message message={"Disconnected... Проверьте подключение к интернету или повторите попытку позже"} sender="" />) });
+    }
+    // this.connection.onopen = () => {
+    //   this.setState({ messages: this.messages.push(<Message message={"Подключение восстановлено"} sender="" />) });
+    // }
     // listen to onmessage event
     this.connection.onmessage = async (evt) => {
       var reply = JSON.parse(evt.data);
       switch (reply.type) {
+        // при подключении получаем роль
         case 'drawing_role':
-
           if (reply.message === 'true')
             this.role = 'Рисующий';
           else
@@ -29,20 +34,20 @@ class App extends React.Component {
 
           this.setState({ messages: this.messages.push(<Message message={"Ваша роль: " + this.role} sender="" />) });
           break;
-
+        // рисующий получает слово для рисования
         case 'word':
           console.log(reply.message);
           this.setState({ messages: this.messages.push(<Message message={"Слово для рисования: " + reply.message} sender="" />) });
           this.canvas.clear();
           break;
-
+        // получаем сообщение в чат
         case 'chat':
           var chat_message = JSON.parse(reply.message);
           this.setState({
             messages: this.messages.push(<Message message={chat_message.message} sender={chat_message.nickname} />)
           });
           break;
-
+        // обновляем рисунок
         case 'lineart':
           console.log(reply.message);
           // this.canvas.loadSaveData(reply.message)
@@ -61,9 +66,9 @@ class App extends React.Component {
 
     };
   }
-
+// список сообщений в чате
   messages = []
-
+// отправить сообщение
   sendMessage = async (e) => {
     e.preventDefault();
     const text = e.target.elements.message.value;
@@ -78,7 +83,7 @@ class App extends React.Component {
 
     this.connection.send(a);
   }
-
+// после нового сообщения пролистываем чат вниз
   scrollToBottom() {
     const scrollHeight = this.messageList.scrollHeight;
     const height = this.messageList.clientHeight;
@@ -90,7 +95,7 @@ class App extends React.Component {
     this.scrollToBottom();
     // this.sendLineArt();
   }
-
+// отправляем измененный рисунок
   sendLineArt = async (e) => {
     // e.preventDefault();
 
@@ -107,7 +112,7 @@ class App extends React.Component {
       this.connection.send(a);
     }
   }
-
+// отправляем предложенное слово
   sendSuggestion = async (e) => {
     e.preventDefault();
     const word = e.target.elements.message.value;
@@ -124,15 +129,10 @@ class App extends React.Component {
 
     this.connection.send(a);
   }
-
+// отменяем изменение в рисунке
   UndoLine = async (e) => {
     e.preventDefault();
     this.canvas.undo();
-  }
-
-  DrawLine = async (e) => {
-    // e.preventDefault();
-    this.canvas.loadSaveData();
   }
 
   render() {
