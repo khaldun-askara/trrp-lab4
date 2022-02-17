@@ -17,11 +17,20 @@ namespace WordService
 
         static List<Word> words;
 
-        private static string sConnStr = new NpgsqlConnectionStringBuilder()
+        private static string sConnStrMainDB = new NpgsqlConnectionStringBuilder()
         {
             Host = Settings.Default.Host,
             Port = Settings.Default.Port,
             Database = Settings.Default.Database,
+            Username = Settings.Default.User,
+            Password = Settings.Default.Password
+        }.ConnectionString;
+
+        private static string sConnStrBackupDB = new NpgsqlConnectionStringBuilder()
+        {
+            Host = Settings.Default.Host,
+            Port = Settings.Default.Port,
+            Database = Settings.Default.BackupDatabase,
             Username = Settings.Default.User,
             Password = Settings.Default.Password
         }.ConnectionString;
@@ -31,7 +40,7 @@ namespace WordService
             string tableName = isMain ? main_table : suggestions;
 
             words = new List<Word>();
-            using (var sConn = new NpgsqlConnection(sConnStr))
+            using (var sConn = new NpgsqlConnection(sConnStrMainDB))
             {
                 sConn.Open();
                 using (var sCommand = new NpgsqlCommand
@@ -60,20 +69,30 @@ namespace WordService
             return words[i];
         }
 
-        public int InsertWord(string word, bool isMain)
+        public int InsertWord(string word, bool isMain, bool isBackup = false)
         {
             string tableName = isMain ? main_table : suggestions;
-            using (var sConn = new NpgsqlConnection(sConnStr))
+            using (var sConn = new NpgsqlConnection(!isBackup ? sConnStrMainDB : sConnStrBackupDB))
             {
                 sConn.Open();
                 using (var sCommand = new NpgsqlCommand
                 {
                     Connection = sConn,
-                    CommandText = $@"INSERT INTO {tableName} (word) VALUES (@word) RETURNING id"
+                    CommandText = !isBackup ? $@"INSERT INTO {tableName} (word) VALUES (@word) RETURNING id" : $@"INSERT INTO {tableName} (word) VALUES (@word) ON CONFLICT DO NOTHING"
                 })
                 {
-                    sCommand.Parameters.AddWithValue("@word", word);
-                    return (int)sCommand.ExecuteScalar();
+                    if (!isBackup)
+                    {
+                        sCommand.Parameters.AddWithValue("@word", word);
+                        return (int)sCommand.ExecuteScalar();
+                    }
+                    else
+                    {
+                        sCommand.Parameters.AddWithValue("@word", word);
+                        sCommand.ExecuteNonQuery();
+                        return 0;
+                    }
+                    
                 }
             }
         }
@@ -81,7 +100,7 @@ namespace WordService
         public void UpdateWord(int id, string word, bool isMain)
         {
             string tableName = isMain ? main_table : suggestions;
-            using (var sConn = new NpgsqlConnection(sConnStr))
+            using (var sConn = new NpgsqlConnection(sConnStrMainDB))
             {
                 sConn.Open();
                 using (var sCommand = new NpgsqlCommand
@@ -100,7 +119,7 @@ namespace WordService
         public void DeleteWord(int id, bool isMain)
         {
             string tableName = isMain ? main_table : suggestions;
-            using (var sConn = new NpgsqlConnection(sConnStr))
+            using (var sConn = new NpgsqlConnection(sConnStrMainDB))
             {
                 sConn.Open();
                 using (var sCommand = new NpgsqlCommand
@@ -117,7 +136,7 @@ namespace WordService
 
         public void MoveFromSuggestions(int id)
         {
-            using (var sConn = new NpgsqlConnection(sConnStr))
+            using (var sConn = new NpgsqlConnection(sConnStrMainDB))
             {
                 sConn.Open();
                 using (var sCommand = new NpgsqlCommand
@@ -135,27 +154,74 @@ namespace WordService
 
         public string GetRandomWord()
         {
-            using (var sConn = new NpgsqlConnection(sConnStr))
+            try
             {
-                sConn.Open();
-                using (var sCommand = new NpgsqlCommand
+                using (var sConn = new NpgsqlConnection(sConnStrMainDB))
                 {
-                    Connection = sConn,
-                    CommandText = $@"SELECT word FROM {main_table} ORDER BY random() LIMIT 1"
-                })
-                {
-                    using (var reader = sCommand.ExecuteReader())
+                    sConn.Open();
+                    using (var sCommand = new NpgsqlCommand
                     {
-                        reader.Read();
-                        return (string)reader["word"];
+                        Connection = sConn,
+                        CommandText = $@"SELECT word FROM {main_table} ORDER BY random() LIMIT 1"
+                    })
+                    {
+                        using (var reader = sCommand.ExecuteReader())
+                        {
+                            reader.Read();
+                            return (string)reader["word"];
+                        }
                     }
+                }
+            }
+            catch
+            {
+                try
+                {
+                    using (var sConn = new NpgsqlConnection(sConnStrBackupDB))
+                    {
+                        sConn.Open();
+                        using (var sCommand = new NpgsqlCommand
+                        {
+                            Connection = sConn,
+                            CommandText = $@"SELECT word FROM {main_table} ORDER BY random() LIMIT 1"
+                        })
+                        {
+                            using (var reader = sCommand.ExecuteReader())
+                            {
+                                reader.Read();
+                                return (string)reader["word"];
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    return "нерабочая бд";
                 }
             }
         }
 
         public void DoBackup()
         {
-
+            try
+            {
+                GetWordsCount(true);
+                foreach (var word in words)
+                {
+                    InsertWord(word.Value, true, true);
+                    Console.WriteLine("вставлено в main " + word.Value);
+                }
+                GetWordsCount(false);
+                foreach (var word in words)
+                {
+                    InsertWord(word.Value, false, true);
+                    Console.WriteLine("вставлено в main " + word.Value);
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 }

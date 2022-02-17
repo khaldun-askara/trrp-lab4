@@ -16,7 +16,7 @@ namespace WordService
         [OperationContract]
         Word GetWord(int i);
         [OperationContract]
-        int InsertWord(string word, bool isMain);
+        int InsertWord(string word, bool isMain, bool isBackup);
         [OperationContract]
         void UpdateWord(int id, string word, bool isMain);
         [OperationContract]

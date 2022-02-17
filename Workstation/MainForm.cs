@@ -81,7 +81,7 @@ namespace Workstation
                 InitializeLV(GetWords(true), lvMain);
                 InitializeLV(GetWords(false), lvSuggestions);
             }
-            catch (Exception ex)
+            catch
             {
                 MessageBox.Show("База данных словарей временно недоступна. Повторите попытку позже", "База данных словарей недоступна", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -104,7 +104,7 @@ namespace Workstation
                     client.MoveFromSuggestions((int)lvi.Tag);
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 MessageBox.Show("База данных словарей временно недоступна. Повторите попытку позже", "База данных словарей недоступна", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -128,7 +128,7 @@ namespace Workstation
                 lvi.Tag = client.InsertWord(aew.NewWord, false);
                 lvSuggestions.Items.Add(lvi);
             }
-            catch (Exception ex)
+            catch
             {
                 MessageBox.Show("База данных словарей временно недоступна. Повторите попытку позже", "База данных словарей недоступна", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -150,7 +150,7 @@ namespace Workstation
                 client.UpdateWord((int)lvi.Tag, aew.NewWord, false);
                 lvi.Text = aew.NewWord;
             }
-            catch (Exception ex)
+            catch
             {
                 MessageBox.Show("База данных словарей временно недоступна. Повторите попытку позже", "База данных словарей недоступна", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -167,7 +167,7 @@ namespace Workstation
                 client.DeleteWord((int)lvi.Tag, false);
                 lvSuggestions.Items.Remove(lvi);
             }
-            catch (Exception ex)
+            catch
             {
                 MessageBox.Show("База данных словарей временно недоступна. Повторите попытку позже", "База данных словарей недоступна", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -188,7 +188,7 @@ namespace Workstation
                 lvi.Tag = client.InsertWord(aew.NewWord, true);
                 lvMain.Items.Add(lvi);
             }
-            catch (Exception ex)
+            catch
             {
                 MessageBox.Show("База данных словарей временно недоступна. Повторите попытку позже", "База данных словарей недоступна", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -211,7 +211,7 @@ namespace Workstation
                 client.UpdateWord((int)lvi.Tag, aew.NewWord, true);
                 lvi.Text = aew.NewWord;
             }
-            catch (Exception ex)
+            catch
             {
                 MessageBox.Show("База данных словарей временно недоступна. Повторите попытку позже", "База данных словарей недоступна", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -228,7 +228,7 @@ namespace Workstation
                 client.DeleteWord((int)lvi.Tag, true);
                 lvMain.Items.Remove(lvi);
             }
-            catch (Exception ex)
+            catch
             {
                 MessageBox.Show("База данных словарей временно недоступна. Повторите попытку позже", "База данных словарей недоступна", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -258,7 +258,7 @@ namespace Workstation
             {
                 MessageBox.Show(client.GetRandomWord(), "рандом");
             }
-            catch (Exception ex)
+            catch
             {
                 MessageBox.Show("База данных словарей временно недоступна. Повторите попытку позже", "База данных словарей недоступна", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;

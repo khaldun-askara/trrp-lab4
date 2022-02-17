@@ -32,7 +32,7 @@ namespace WordService
             {
                 host.Open();
             }
-            catch (Exception ex)
+            catch
             {
                 Console.WriteLine("Сервис уже запущен");
                 return;
@@ -66,7 +66,7 @@ namespace WordService
                     {
                         service.InsertWord(message, false);
                     }
-                    catch (Exception ex)
+                    catch
                     {
                         Console.WriteLine("Failed to insert a word");
                     }
@@ -80,8 +80,8 @@ namespace WordService
                 Console.ReadLine();
             }
 
-            //Console.WriteLine("Server is running...");
-            //Console.ReadLine();
+            Console.WriteLine("Server is running...");
+            Console.ReadLine();
         }
     }
 }
