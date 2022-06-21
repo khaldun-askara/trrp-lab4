@@ -1,0 +1,62 @@
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\obj\Debug\net5.0\lab 4.csproj.AssemblyReference.cache
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\obj\Debug\net5.0\lab 4.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\obj\Debug\net5.0\lab 4.AssemblyInfoInputs.cache
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\obj\Debug\net5.0\lab 4.AssemblyInfo.cs
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\obj\Debug\net5.0\lab 4.csproj.CoreCompileInputs.cache
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\obj\Debug\net5.0\lab 4.genruntimeconfig.cache
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\lab 4.csproj.AssemblyReference.cache
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\lab 4.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\lab 4.AssemblyInfoInputs.cache
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\lab 4.AssemblyInfo.cs
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\lab 4.csproj.CoreCompileInputs.cache
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\lab 4.genruntimeconfig.cache
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\crocodileAppBack.exe
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\crocodileAppBack.deps.json
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\crocodileAppBack.runtimeconfig.json
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\crocodileAppBack.runtimeconfig.dev.json
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\crocodileAppBack.dll
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\ref\crocodileAppBack.dll
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\crocodileAppBack.pdb
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\System.Configuration.ConfigurationManager.dll
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\System.Drawing.Common.dll
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\System.Security.AccessControl.dll
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\System.Security.Permissions.dll
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\System.Windows.Extensions.dll
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.1\Microsoft.Win32.SystemEvents.dll
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\runtimes\unix\lib\netcoreapp3.1\System.Drawing.Common.dll
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.1\System.Drawing.Common.dll
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.AccessControl.dll
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.1\System.Windows.Extensions.dll
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\obj\Debug\net5.0\lab 4.csproj.CopyComplete
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\obj\Debug\net5.0\crocodileAppBack.dll
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\obj\Debug\net5.0\ref\crocodileAppBack.dll
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\obj\Debug\net5.0\crocodileAppBack.pdb
+C:\Users\Aisen Sousuke\OneDrive\учебное дерьмо\10 трим\тррррррррррррррп\lab 4\crocodileAppBack\bin\Debug\net5.0\RabbitMQ.Client.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\crocodileAppBack.exe
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\crocodileAppBack.deps.json
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\crocodileAppBack.runtimeconfig.json
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\crocodileAppBack.runtimeconfig.dev.json
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\crocodileAppBack.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\ref\crocodileAppBack.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\crocodileAppBack.pdb
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\RabbitMQ.Client.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\System.Configuration.ConfigurationManager.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\System.Drawing.Common.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\System.Security.AccessControl.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\System.Security.Permissions.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\System.Windows.Extensions.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.1\Microsoft.Win32.SystemEvents.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\runtimes\unix\lib\netcoreapp3.1\System.Drawing.Common.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.1\System.Drawing.Common.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.AccessControl.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.1\System.Windows.Extensions.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\lab 4.csproj.CopyComplete
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\crocodileAppBack.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\ref\crocodileAppBack.dll
+C:\Users\ciceron\source\repos\калдунс_бренч\trrp-lab4\crocodileAppBack\obj\Debug\net5.0\crocodileAppBack.pdb
